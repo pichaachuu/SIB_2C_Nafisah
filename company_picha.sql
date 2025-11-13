@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict rtrWQ19M4rUZnIgjJmTckbk5BGbVAWZKrYh18cSxcGktke5KCAIjRRbJNFJG4lU
+\restrict uEX69MBTnj6trbCkj4KV3OCSRzivDUqYNPxuaWtJAcSWuq9MUiEUtC6mFHEUvl1
 
 -- Dumped from database version 15.14
 -- Dumped by pg_dump version 15.14
 
--- Started on 2025-11-13 23:19:04
+-- Started on 2025-11-13 23:30:35
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,7 +21,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 227 (class 1255 OID 26117)
+-- TOC entry 226 (class 1255 OID 26117)
 -- Name: get_department_summary(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -42,16 +42,22 @@ $$;
 ALTER FUNCTION public.get_department_summary() OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1255 OID 26116)
+-- TOC entry 227 (class 1255 OID 26119)
 -- Name: get_employees_by_salary_range(numeric, numeric); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_employees_by_salary_range(min_salary numeric, max_salary numeric) RETURNS TABLE(salary_result numeric)
+CREATE FUNCTION public.get_employees_by_salary_range(min_salary numeric, max_salary numeric) RETURNS TABLE(id integer, full_name text, department text, "position" text, salary numeric)
     LANGUAGE sql
     AS $$
-	SELECT salary
-	FROM employees
-	WHERE salary BETWEEN min_salary AND max_salary
+    SELECT
+        id,
+        CONCAT(first_name, ' ', last_name) AS full_name,
+        department,
+        position,
+        salary
+    FROM employees
+    WHERE salary BETWEEN min_salary AND max_salary
+    ORDER BY salary DESC, id;
 $$;
 
 
@@ -511,11 +517,11 @@ ALTER TABLE ONLY public.projects
 REFRESH MATERIALIZED VIEW public.dashboard_summary;
 
 
--- Completed on 2025-11-13 23:19:04
+-- Completed on 2025-11-13 23:30:36
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict rtrWQ19M4rUZnIgjJmTckbk5BGbVAWZKrYh18cSxcGktke5KCAIjRRbJNFJG4lU
+\unrestrict uEX69MBTnj6trbCkj4KV3OCSRzivDUqYNPxuaWtJAcSWuq9MUiEUtC6mFHEUvl1
 
